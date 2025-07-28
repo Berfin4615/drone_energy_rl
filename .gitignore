@@ -1,0 +1,6 @@
+/geographic_info
+/hector_quadrotor_noetic
+/unique_identifier
+build/
+devel/
+install/
