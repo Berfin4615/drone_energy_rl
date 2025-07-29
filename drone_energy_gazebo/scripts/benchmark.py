@@ -1,23 +1,17 @@
+#!/usr/bin/env python3
+
+import time
 import numpy as np
 from drone_rl_env import DroneRLEnv
-from stable_baselines3 import SAC, DQN
+from stable_baselines3 import DQN, SAC
 
-def run_planner(env, planner_type="A*"):
-    if planner_type == "A*":
-        # Implement A* path planning
-        pass
-    elif planner_type == "Lawnmower":
-        # Implement lawnmower pattern
-        pass
-
-# Compare RL vs. Traditional Planners
 env = DroneRLEnv()
-rl_models = {
+models = {
     "DQN": DQN.load("dqn_drone"),
     "SAC": SAC.load("sac_drone")
 }
 
-for name, model in rl_models.items():
+for name, model in models.items():
     obs = env.reset()
     total_reward = 0
     for _ in range(1000):
@@ -26,8 +20,17 @@ for name, model in rl_models.items():
         total_reward += reward
         if done:
             break
-    print(f"{name} Total Reward: {total_reward}")
+    print(f"{name} Total Reward: {total_reward:.2f}")
 
-# Run traditional planners
-run_planner(env, "A*")
+def run_planner(env, pattern="Lawnmower"):
+    print(f"Running {pattern} planner...")
+    start = time.time()
+    total_energy = 0
+    for i in range(5):
+        for dx in [0.5, -0.5]:
+            action = np.array([dx, 0, 0, 0])
+            _, _, _, info = env.step(action)
+            total_energy += info['energy_step']
+    print(f"{pattern} Time: {time.time()-start:.2f}s, Energy: {total_energy:.2f}")
+
 run_planner(env, "Lawnmower")
