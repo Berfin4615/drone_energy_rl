@@ -1,19 +1,26 @@
 <?xml version="1.0"?>
-
 <launch>
-    <arg name="world" default="/root/dronerl_ws/src/drone_energy_gazebo/worlds/reinforcement_world.world"/>
     <arg name="gui" default="true"/>
     <arg name="args" default=""/>
     
     <param name="/use_sim_time" value="true" />
 
-    <include file="$(find hector_gazebo_worlds)/launch/start.launch">
-        <arg name="world" value="$(find hector_gazebo_worlds)/worlds/rolling_landscape_120m.world"/> 
+    <!-- START GAZEBO WITH YOUR CUSTOM WINDY WORLD -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="/root/dronerl_ws/src/drone_energy_gazebo/worlds/reinforcement_world.world"/>
+        <arg name="gui" value="$(arg gui)"/>
+        <arg name="extra_gazebo_args" value="$(arg args)"/>
     </include>
-    <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch" >
+
+    <!-- SPAWN QUADROTOR -->
+    <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
         <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/> 
     </include>
     
-    <!-- Start rviz visualization with preset config -->
+    <!-- Start rviz -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hector_quadrotor_demo)/rviz_cfg/outdoor_flight.rviz"/>
+
+    <!-- Start scripts -->
+    <!-- FORCE WIND INITIALIZATION -->
+    <node name="force_wind" pkg="drone_energy_gazebo" type="force_wind.py"/>
 </launch>

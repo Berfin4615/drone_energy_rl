@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <sdf version="1.4">
   <world name="default">
+    <wind>
+      <linear_velocity>2.0 1.0 0.0</linear_velocity>
+      <enable_wind>true</enable_wind>
+    </wind>
+    <plugin name="wind_plugin" filename="libWindPlugin.so">
+      <frame>world</frame>
+      <topic>/wind</topic>
+    </plugin>
     <scene>
       <ambient>0.5 0.5 0.5 1</ambient>
       <background>0.5 0.5 0.5 1</background>
