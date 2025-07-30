@@ -165,13 +165,13 @@ class DroneRLEnv(gym.Env):
         self.empty_voltage = 10.0
         
         # Define landscape boundaries (based on your 120m landscape)
-        self.x_min = -60.0  # -60m
-        self.x_max = 60.0   # +60m
-        self.y_min = -60.0  # -60m
-        self.y_max = 60.0   # +60m
+        self.x_min = -63.0  # -60m
+        self.x_max = 63.0   # +60m
+        self.y_min = -63.0  # -60m
+        self.y_max = 63.0   # +60m
         self.z_min = 0.1    # Minimum altitude (above ground)
-        self.z_max = 50.0   # Maximum altitude
-        
+        self.z_max = 65.0   # Maximum altitude
+    
         # Define discrete action space for DQN
         self.action_space = spaces.Discrete(9)
         
@@ -278,6 +278,7 @@ class DroneRLEnv(gym.Env):
         out_of_bounds = self._is_out_of_bounds()
         
         if out_of_bounds:
+            print("Drone is out of bounds! Resetting environment.")
             reward = -100  # Large penalty for leaving the environment
             terminated = True
             truncated = True
@@ -296,6 +297,7 @@ class DroneRLEnv(gym.Env):
             "total_energy": self.energy_consumed,
             "out_of_bounds": out_of_bounds
         }
+        print(f"State: {state}, Reward: {reward}, Terminated: {terminated}, Truncated: {truncated}, Info: {info}")
         return state, reward, terminated, truncated, info
 
     def reset(self, seed=None, options=None):
