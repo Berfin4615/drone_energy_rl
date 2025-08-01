@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import rospy
 from gazebo_msgs.srv import ApplyBodyWrench
+from geometry_msgs.msg import Wrench
+import time
+from geometry_msgs.msg import Vector3
 
 def set_wind():
     rospy.init_node('force_wind')

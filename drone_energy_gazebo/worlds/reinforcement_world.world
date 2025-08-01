@@ -47,7 +47,8 @@
         <collision name="120m_landscape_smooth_tri_collision">
           <geometry>
             <mesh>
-              <uri>file://120m_landscape_smooth_tri.dae</uri>
+              <uri>file:///root/dronerl_ws/src/drone_energy_rl/drone_energy_gazebo/Media/models/120m_landscape_smooth_tri.dae</uri>
+
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -55,7 +56,8 @@
         <visual name="120m_landscape_smooth_tri">
           <geometry>
             <mesh>
-              <uri>file://120m_landscape_smooth_tri.dae</uri>
+              <uri>file:///root/dronerl_ws/src/drone_energy_rl/drone_energy_gazebo/Media/models/120m_landscape_smooth_tri.dae</uri>
+
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
