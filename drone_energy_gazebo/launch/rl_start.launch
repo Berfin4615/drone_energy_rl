@@ -4,12 +4,16 @@
     <arg name="args" default=""/>
     
     <param name="/use_sim_time" value="true" />
+    
+    <!-- GRAPHICS FIXES -->
+    <env name="LIBGL_ALWAYS_SOFTWARE" value="1"/>
+    <env name="GAZEBO_GL" value="OSMESA"/>
 
-    <!-- START GAZEBO WITH YOUR CUSTOM WINDY WORLD -->
+    <!-- START GAZEBO -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="/root/dronerl_ws/src/drone_energy_gazebo/worlds/reinforcement_world.world"/>
+        <arg name="world_name" value="$(find drone_energy_gazebo)/worlds/reinforcement_world.world"/> <!-- FIXED PATH -->
         <arg name="gui" value="$(arg gui)"/>
-        <arg name="extra_gazebo_args" value="$(arg args)"/>
+        <arg name="extra_gazebo_args" value="$(arg args) --verbose"/> <!-- VERBOSE LOGGING -->
     </include>
 
     <!-- SPAWN QUADROTOR -->
@@ -20,7 +24,6 @@
     <!-- Start rviz -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hector_quadrotor_demo)/rviz_cfg/outdoor_flight.rviz"/>
 
-    <!-- Start scripts -->
-    <!-- FORCE WIND INITIALIZATION -->
+    <!-- FORCE WIND -->
     <node name="force_wind" pkg="drone_energy_gazebo" type="force_wind.py"/>
 </launch>
