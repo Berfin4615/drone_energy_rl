@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<sdf version="1.4">
+  <world name="drone_navigation_20m">
+    <!-- Environment Settings -->
+    <wind>
+      <linear_velocity>1.0 0.5 0.0</linear_velocity>
+      <enable_wind>true</enable_wind>
+    </wind>
+    <scene>
+      <ambient>0.5 0.5 0.5 1</ambient>
+      <background>0.5 0.5 0.5 1</background>
+      <shadows>false</shadows>
+    </scene>
+    <physics type="ode">
+      <gravity>0 0 -9.81</gravity>
+      <max_step_size>0.001</max_step_size>
+    </physics>
+
+    <!-- Lighting -->
+    <light type="directional" name="sun">
+      <pose>0 5 5 0 0 0</pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>1 1 1 1</specular>
+      <direction>0.1 0.1 -1</direction>
+    </light>
+
+    <!-- Base Terrain (20x20m) -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>20 20</size></plane>
+          </geometry>
+          <surface><friction><ode><mu>100</mu></ode></friction></surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>20 20</size></plane>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grass</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Uneven Terrain Ring (High Energy Zone) -->
+    <model name="uneven_terrain">
+      <static>true</static>
+      <pose>0 0 0.1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder><radius>7</radius><length>0.2</length></cylinder>
+          </geometry>
+          <surface><friction><ode><mu>200</mu></ode></friction></surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder><radius>7</radius><length>0.2</length></cylinder>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Rough</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Maze Obstacles (Scaled Down) -->
+    <!-- Outer Walls -->
+    <model name="wall_north">
+      <static>true</static>
+      <pose>0 8 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>16 0.2 2</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>16 0.2 2</size></box></geometry>
+          <material><script><name>Gazebo/Grey</name></script></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_south">
+      <static>true</static>
+      <pose>0 -8 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>16 0.2 2</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>16 0.2 2</size></box></geometry>
+          <material><script><name>Gazebo/Grey</name></script></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Inner Maze -->
+    <model name="obstacle_1">
+      <static>true</static>
+      <pose>3 0 1 0 0 1.57</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>8 0.2 2</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>8 0.2 2</size></box></geometry>
+          <material><script><name>Gazebo/DarkGrey</name></script></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="obstacle_2">
+      <static>true</static>
+      <pose>-3 4 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>4 0.2 2</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>4 0.2 2</size></box></geometry>
+          <material><script><name>Gazebo/DarkGrey</name></script></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Start/Goal Markers -->
+    <model name="start">
+      <static>true</static>
+      <pose>-9 -9 0.1 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><cylinder><radius>0.5</radius><length>0.1</length></cylinder></geometry>
+          <material><script><name>Gazebo/Green</name></script></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="goal">
+      <static>true</static>
+      <pose>9 9 0.1 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><cylinder><radius>0.5</radius><length>0.1</length></cylinder></geometry>
+          <material><script><name>Gazebo/Red</name></script></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Energy Zone Visual -->
+    <model name="energy_zone">
+      <static>true</static>
+      <pose>0 0 0.05 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><cylinder><radius>7</radius><length>0.01</length></cylinder></geometry>
+          <material>
+            <script><name>Gazebo/YellowTransparent</name></script>
+            <ambient>1 1 0 0.3</ambient>
+          </material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>

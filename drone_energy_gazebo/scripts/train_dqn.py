@@ -1,85 +1,75 @@
-# #!/usr/bin/env python3
-
-# import rospy
-# import csv
-# from stable_baselines3 import DQN
-# from drone_gym_wrapper import DroneGymWrapper  # wrapper'ı kullanıyoruz
-
-# def main():
-#     rospy.init_node('train_dqn')
-
-#     env = DroneGymWrapper()
-
-#     model = DQN(
-#         policy='MlpPolicy',
-#         env=env,
-#         verbose=1,
-#         tensorboard_log='./logs/dqn/'
-#     )
-
-#     model.learn(total_timesteps=100000)
-#     model.save("dqn_drone")
-
-#     with open('training_dqn_log.csv', 'w', newline='') as log_file:
-#         writer = csv.writer(log_file)
-#         writer.writerow(['Episode', 'Reward', 'Battery%', 'Energy', 'Distance'])
-
-#         for ep in range(100):
-#             obs = env.reset()
-#             total_reward = 0
-#             done = False
-
-#             while not done and not rospy.is_shutdown():
-#                 action, _ = model.predict(obs)
-#                 obs, reward, done, info = env.step(action)
-#                 total_reward += reward
-
-#             writer.writerow([
-#                 ep,
-#                 round(total_reward, 3),
-#                 round(info.get('battery', 0.0), 2),
-#                 round(info.get('total_energy', 0.0), 3),
-#                 round(info.get('distance_to_goal', 0.0), 3)
-#             ])
-
-#     rospy.loginfo("DQN training and evaluation finished.")
-
-# if __name__ == "__main__":
-#     main()
-
 #!/usr/bin/env python3
 import rospy
 import gymnasium as gym
 from stable_baselines3 import DQN
+from stable_baselines3.common.callbacks import CheckpointCallback, EvalCallback
+from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.vec_env import DummyVecEnv
 from drone_rl_env import DroneRLEnv
+import os
 
 def main():
-    rospy.init_node('train_dqn', anonymous=True)
+    # Initialize ROS node
+    rospy.init_node('drone_rl_training', anonymous=True)
+    
+    # Create logs directory
+    os.makedirs("./dqn_logs/", exist_ok=True)
     
     # Create environment
-    env = DroneRLEnv()
+    env = DummyVecEnv([lambda: DroneRLEnv()])
     
-    # Initialize DQN with discrete action space
+    # Callbacks
+    checkpoint_callback = CheckpointCallback(
+        save_freq=10000,
+        save_path="./dqn_logs/",
+        name_prefix="drone_model"
+    )
+    
+    eval_callback = EvalCallback(
+        env,
+        best_model_save_path="./dqn_logs/best/",
+        log_path="./dqn_logs/",
+        eval_freq=5000,
+        deterministic=True,
+        render=False
+    )
+    
+    # Model parameters
     model = DQN(
         "MlpPolicy",
         env,
         verbose=1,
-        learning_rate=1e-3,
-        buffer_size=10000,
-        learning_starts=1000,
-        batch_size=32,
+        learning_rate=5e-4,
+        buffer_size=50000,
+        learning_starts=5000,
+        batch_size=128,
         gamma=0.99,
-        exploration_fraction=0.1,
-        exploration_final_eps=0.01,
+        tau=1.0,
+        train_freq=4,
+        gradient_steps=1,
+        target_update_interval=10000,
+        exploration_fraction=0.2,
+        exploration_initial_eps=1.0,
+        exploration_final_eps=0.05,
+        policy_kwargs=dict(net_arch=[256, 256]),
+        tensorboard_log="./dqn_logs/",
         device="auto"
     )
     
     try:
-        model.learn(total_timesteps=100000)
-        model.save("dqn_drone_model")
+        rospy.loginfo("Starting training... Press Ctrl+C to stop.")
+        model.learn(
+            total_timesteps=500000,
+            callback=[checkpoint_callback, eval_callback],
+            log_interval=100,
+            tb_log_name="DQN"
+        )
+        model.save("dqn_drone_final_model")
         rospy.loginfo("Training completed successfully!")
     except KeyboardInterrupt:
         rospy.loginfo("Training interrupted by user")
+    except Exception as e:
+        rospy.logerr(f"Training failed: {str(e)}")
     finally:
         env.close()
 

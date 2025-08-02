@@ -61,7 +61,8 @@
       <static>true</static>
     </model>
     <model name='unit_box'>
-      <pose>-62.944 62.9287 0.5 0 -0 0</pose>
+      <static>true</static>
+      <pose>-59.844 58.9287 0.1 0 -0 0</pose>
       <link name='link'>
         <inertial>
           <mass>1</mass>
@@ -78,7 +79,7 @@
         <collision name='collision'>
           <geometry>
             <box>
-              <size>4.0 4.0 0.1</size>
+              <size>2.0 2.0 0.1</size>
             </box>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -98,7 +99,7 @@
         <visual name='visual'>
           <geometry>
             <box>
-              <size>4.0 4.0 0.1</size>
+              <size>2.0 2.0 0.1</size>
             </box>
           </geometry>
           <material>
@@ -129,20 +130,21 @@
         </link>
       </model>
       <model name='unit_box'>
-        <pose>-62.4954 62.2297 0.5 1e-06 -1e-06 6.4e-05</pose>
+        <static>true</static>
+        <pose>-59.844 58.9287 0.1 0 -0 0</pose>
         <scale>1.90513 2.38295 1</scale>
         <link name='link'>
-          <pose>-62.4954 62.2297 0.5 1e-06 -1e-06 6.4e-05</pose>
+          <pose>-59.844 58.9287 0.1 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>-0.970321 -2.0013 -0.3396 0.863799 -1.20034 -3.14145</acceleration>
           <wrench>-0.970321 -2.0013 -0.3396 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_box_clone'>
-        <pose>62.5097 -62.2278 0.5 -2e-06 -0 6.4e-05</pose>
+        <pose>62.5097 -62.2278 0.1 -2e-06 -0 6.4e-05</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>62.5097 -62.2278 0.5 -2e-06 -0 6.4e-05</pose>
+          <pose>60.5097 -60.2278 0.1 -2e-06 -0 6.4e-05</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -153,7 +155,8 @@
       </light>
     </state>
     <model name='unit_box_clone'>
-      <pose>62.5097 -62.2278 0.5 -2e-06 -0 6.4e-05</pose>
+      <static>true</static>
+      <pose>60.5097 -60.2278 0.1 -2e-06 -0 6.4e-05</pose>
       <link name='link'>
         <inertial>
           <mass>1</mass>
@@ -170,7 +173,7 @@
         <collision name='collision'>
           <geometry>
             <box>
-              <size>4.0 4.0 0.1</size>
+              <size>2.0 2.0 0.1</size>
             </box>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -190,7 +193,7 @@
         <visual name='visual'>
           <geometry>
             <box>
-              <size>4.0 4.0 0.1</size>
+              <size>2.0 2.0 0.1</size>
             </box>
           </geometry>
           <material>
@@ -432,41 +435,6 @@
               <uri>file://media/materials/scripts/gazebo.material</uri>
             </script>
           </material>
-        </visual>
-      </link>
-    </model>
-    <model name='north_boundary'>
-      <static>true</static>
-      <pose>0 65 0 0 0 0</pose>
-      <link name='link'>
-        <visual name='visual'>
-          <geometry><box><size>130 1 1</size></box></geometry>
-          <material><script><name>Gazebo/Red</name></script></material>
-        </visual>
-      </link>
-    </model>
-    <model name='south_boundary'>
-      <static>true</static>
-      <pose>0 -65 0 0 0 0</pose>
-      <!-- same as north -->
-    </model>
-    <model name='east_boundary'>
-      <static>true</static>
-      <pose>65 0 0 0 0 0</pose>
-      <link name='link'>
-        <visual name='visual'>
-          <geometry><box><size>1 130 1</size></box></geometry>
-          <material><script><name>Gazebo/Red</name></script></material>
-        </visual>
-      </link>
-    </model>
-    <model name='west_boundary'>
-      <static>true</static>
-      <pose>-65 0 0 0 0 0</pose>
-      <link name='link'>
-        <visual name='visual'>
-          <geometry><box><size>1 130 1</size></box></geometry>
-          <material><script><name>Gazebo/Red</name></script></material>
         </visual>
       </link>
     </model>
